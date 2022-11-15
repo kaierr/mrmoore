@@ -1,0 +1,47 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/mrmoore
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate.ddl-auto: update
+    generate-ddl: true
+
+server:
+  servlet:
+    context-path: /api
+
+price-distribution:
+  event-price: 400
+  weekend-limit: 700
+  workday-limit: 600
+  visitors:
+    - type: ADULT
+      prices:
+        - duration: 60
+          price: 6
+        - duration: 60
+          price: 3
+        - duration: 0
+          price: 2
+    - type: CHILD
+      prices:
+        - duration: 60
+          price: 4
+        - duration: 60
+          price: 3
+        - duration: 0
+          price: 2
+    - type: BABY
+      prices:
+        - duration: 0
+          price: 0
+    - type: EVENT
+      prices:
+        - duration: 60
+          price: 4
+    - type: UNLIMITED
+      prices:
+        - duration: 0
+          price: 0

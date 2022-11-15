@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  postgres:
+    container_name: postgres_mrmoore
+    image: library/postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mrmoore
+    ports:
+      - "5433:5432"
+    restart: unless-stopped
