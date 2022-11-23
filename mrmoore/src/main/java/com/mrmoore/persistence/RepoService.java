@@ -68,11 +68,13 @@ public class RepoService {
         return statusMapper.mapToObject(savedStatusEntity);
     }
 
+
     public List<GroupDO> getGroupsAfterTime(Date date) {
         return statusRepository.findByTimestampGreaterThan(date)
                 .orElseThrow()
                 .stream()
                 .map(l -> groupMapper.mapToObject(l.getVisitorEntity().getGroupEntity()))
+                .distinct()
                 .toList();
     }
 }

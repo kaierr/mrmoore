@@ -21,6 +21,22 @@ public class GroupDO {
     }
 
     public Boolean isActive() {
-        return visitorList.stream().allMatch(l-> l.isActive().equals(false));
+        return visitorList.stream().allMatch(l -> l.isActive().equals(false));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof GroupDO c)) {
+            return false;
+        }
+        return getId().equals(c.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

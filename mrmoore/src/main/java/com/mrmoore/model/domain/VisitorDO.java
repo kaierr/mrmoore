@@ -1,12 +1,15 @@
 package com.mrmoore.model.domain;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import com.mrmoore.config.Constants;
 import com.mrmoore.config.PriceDistribution;
 import com.mrmoore.config.PriceDistribution.PriceDistributionEntry;
 import com.mrmoore.config.SpringContext;
+import com.mrmoore.model.PriceService;
 import com.mrmoore.model.VisitorType;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,27 +27,18 @@ public class VisitorDO {
     }
 
     public Long getPrice() {
-        PriceDistribution priceProperty = SpringContext.getBean(PriceDistribution.class);
-        List<PriceDistributionEntry> priceDistribution =
-                priceProperty.getVisitors().stream().filter(l -> l.getType().equals(getVisitorType()))
-                        .findFirst().get().getPrices();
-
-        long timeInMinutes = getTotalTimeInMinutes();
-        return calculatePriceForTime(priceDistribution, timeInMinutes);
+        PriceService priceService = SpringContext.getBean(PriceService.class);
+        return priceService.calculatePrice(this);
     }
 
-    private long calculatePriceForTime(List<PriceDistributionEntry> priceDistribution, long timeInMinutes) {
-        long totalPrice = 0L;
-        long passedCalculationTime = 0L;
-        for (int i = 0; i < priceDistribution.size() - 1; i++) {
-            long periodDuration = Math.min(Math.max(0, timeInMinutes - passedCalculationTime),
-                    priceDistribution.get(i).getDuration());
-            totalPrice += periodDuration * priceDistribution.get(i).getPrice();
-            passedCalculationTime += priceDistribution.get(i).getDuration();
-        }
-        totalPrice =
-                totalPrice + Math.max(0, timeInMinutes - passedCalculationTime) * priceDistribution.get(priceDistribution.size() - 1).getPrice();
-        return totalPrice;
+
+
+    public StatusChangeDO getCurrentStatus() {
+        return statusChanges.get(statusChanges.size() - 1);
+    }
+
+    public LocalDateTime getStartDate() {
+        return statusChanges.get(0).getLocalDateTime();
     }
 
     public Long getTotalTimeInMinutes() {
@@ -58,10 +52,6 @@ public class VisitorDO {
         return timeDiff / 60000;
     }
 
-    public StatusChangeDO getCurrentStatus() {
-        return statusChanges.get(statusChanges.size() - 1);
-    }
-
     private Long concatenateStatusChangeTime(Long timeDiff, StatusChangeDO statusChange) {
         long newTimeAdjustment = statusChange.getLocalDateTime().atZone(Constants.ZONE_ID).toInstant().toEpochMilli();
         if (statusChange.getActive().equals(true))
@@ -69,5 +59,21 @@ public class VisitorDO {
         else
             timeDiff += newTimeAdjustment;
         return timeDiff;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (!(o instanceof GroupDO c)) {
+            return false;
+        }
+        return getId().equals(c.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }
