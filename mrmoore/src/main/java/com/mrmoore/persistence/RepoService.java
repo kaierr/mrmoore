@@ -2,14 +2,12 @@ package com.mrmoore.persistence;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.mrmoore.model.domain.GroupDO;
 import com.mrmoore.model.domain.StatusChangeDO;
 import com.mrmoore.model.domain.VisitorDO;
 import com.mrmoore.persistence.entity.GroupEntity;
 import com.mrmoore.persistence.entity.StatusEntity;
-import com.mrmoore.persistence.entity.VisitorEntity;
 import com.mrmoore.persistence.mapper.GroupMapper;
 import com.mrmoore.persistence.mapper.StatusMapper;
 import com.mrmoore.persistence.mapper.VisitorMapper;
@@ -54,12 +52,6 @@ public class RepoService {
         GroupEntity groupEntity = groupMapper.mapToEntity(group);
         GroupEntity savedGroupEntity = groupRepository.saveAndFlush(groupEntity);
         return groupMapper.mapToObject(savedGroupEntity);
-    }
-
-    public VisitorDO createNewVisitor(VisitorDO visit, Long groupId) {
-        VisitorEntity visitorEntity = visitorMapper.mapToEntity(visit, groupId);
-        VisitorEntity savedVisitorEntity = visitorRepository.saveAndFlush(visitorEntity);
-        return visitorMapper.mapToObject(savedVisitorEntity);
     }
 
     public StatusChangeDO createNewVisitorStatusChange(StatusChangeDO statusChangeDO, Long visitId) {

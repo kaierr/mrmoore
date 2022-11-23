@@ -7,11 +7,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Setter
 @Getter
 @Component
+@PropertySource(value = "classpath:price-distribution.yml", factory = YamlPropertySourceFactory.class)
 @ConfigurationProperties(prefix = "price-distribution")
 public class PriceDistribution {
 

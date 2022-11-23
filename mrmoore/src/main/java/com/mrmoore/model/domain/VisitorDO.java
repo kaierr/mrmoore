@@ -2,12 +2,9 @@ package com.mrmoore.model.domain;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 import com.mrmoore.config.Constants;
-import com.mrmoore.config.PriceDistribution;
-import com.mrmoore.config.PriceDistribution.PriceDistributionEntry;
 import com.mrmoore.config.SpringContext;
 import com.mrmoore.model.PriceService;
 import com.mrmoore.model.VisitorType;
@@ -23,14 +20,13 @@ public class VisitorDO {
     private List<StatusChangeDO> statusChanges;
 
     public Boolean isActive() {
-        return getStatusChanges().get(getStatusChanges().size()-1).getActive();
+        return getStatusChanges().get(getStatusChanges().size() - 1).getActive();
     }
 
     public Long getPrice() {
         PriceService priceService = SpringContext.getBean(PriceService.class);
         return priceService.calculatePrice(this);
     }
-
 
 
     public StatusChangeDO getCurrentStatus() {

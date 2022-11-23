@@ -30,6 +30,7 @@ public class UtilsService {
         Date date = Date.from(dateTime.atZone(Constants.ZONE_ID).toInstant());
         return isHolidayOrWeekend(date);
     }
+
     public Boolean isHolidayOrWeekend(Date date) {
         return isHoliday(date)
                 || isWeekend(date);

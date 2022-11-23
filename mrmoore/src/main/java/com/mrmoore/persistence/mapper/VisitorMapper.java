@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.mrmoore.model.domain.GroupDO;
 import com.mrmoore.model.domain.VisitorDO;
 import com.mrmoore.persistence.entity.GroupEntity;
 import com.mrmoore.persistence.entity.VisitorEntity;
@@ -61,13 +60,13 @@ public class VisitorMapper {
     }
 
     public List<VisitorDO> mapToObjects(Set<VisitorEntity> visitorEntitySet) {
-        if(visitorEntitySet.isEmpty())
+        if (visitorEntitySet.isEmpty())
             return Collections.emptyList();
         return visitorEntitySet.stream().map(this::mapToObject).toList();
     }
 
     public Set<VisitorEntity> mapToEntities(List<VisitorDO> visitors, GroupEntity newGroupEntity) {
-        if(visitors.isEmpty())
+        if (visitors.isEmpty())
             return Collections.emptySet();
         return visitors.stream().map(l -> mapToEntity(l, newGroupEntity)).collect(Collectors.toSet());
     }

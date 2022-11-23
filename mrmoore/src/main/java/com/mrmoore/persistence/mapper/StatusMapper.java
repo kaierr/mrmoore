@@ -28,12 +28,13 @@ public class StatusMapper {
     public StatusChangeDO mapToObject(@NotNull StatusEntity statusEntity) {
         StatusChangeDO statusChange = new StatusChangeDO();
         statusChange.setActive(statusEntity.getActive());
-        statusChange.setLocalDateTime(LocalDateTime.ofInstant(statusEntity.getTimestamp().toInstant(), Constants.ZONE_ID));
+        statusChange.setLocalDateTime(LocalDateTime.ofInstant(statusEntity.getTimestamp().toInstant(),
+                Constants.ZONE_ID));
         return statusChange;
     }
 
     public List<StatusChangeDO> mapToObjects(Set<StatusEntity> statusEntitySet) {
-        if (statusEntitySet.isEmpty()){
+        if (statusEntitySet.isEmpty()) {
             return Collections.emptyList();
         }
         return statusEntitySet.stream().map(this::mapToObject).toList();

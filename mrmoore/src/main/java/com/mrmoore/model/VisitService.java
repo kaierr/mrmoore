@@ -44,7 +44,7 @@ public class VisitService {
     @Transactional
     public GroupDO createNewGroup(@NotNull String comment, Map<VisitorType, Integer> visitors) {
         List<VisitorDO> visitorsList = new ArrayList<>();
-        for (Entry<VisitorType, Integer> entry:visitors.entrySet()){
+        for (Entry<VisitorType, Integer> entry : visitors.entrySet()) {
             for (int i = 0; i < entry.getValue(); i++) {
                 VisitorDO visitor = new VisitorDO();
                 visitor.setVisitorType(entry.getKey());

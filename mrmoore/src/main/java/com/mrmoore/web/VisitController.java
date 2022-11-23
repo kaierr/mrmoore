@@ -11,7 +11,6 @@ import com.mrmoore.web.api.GroupInfoResponse;
 import com.mrmoore.web.api.NewGroupRequest;
 import com.mrmoore.web.api.VisitorInfoResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,12 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-//@RequestMapping("/v1")
 @RequiredArgsConstructor
 public class VisitController {
-    @Autowired
-    private VisitService visitService;
-
+    private final VisitService visitService;
 
     @PostMapping(value = "/group", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public GroupInfoResponse createNewVisit(@RequestBody NewGroupRequest request) {

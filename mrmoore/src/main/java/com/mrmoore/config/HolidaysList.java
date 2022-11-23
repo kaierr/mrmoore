@@ -22,13 +22,13 @@ public class HolidaysList {
     public List<Date> getHolidayDates() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         List<Date> result;
-            result = dates.stream().map(l -> {
-                try {
-                    return formatter.parse(l);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
-            }).toList();
+        result = dates.stream().map(l -> {
+            try {
+                return formatter.parse(l);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        }).toList();
         return result;
     }
 }

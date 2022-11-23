@@ -21,12 +21,27 @@ public class PriceService {
     public Long calculatePrice(VisitorDO visitor) {
         Long resultPrice;
         switch (visitor.getVisitorType()) {
-            case UNLIMITED -> resultPrice = calculatePriceForUnlimited(visitor.getStartDate());
-            default ->
-                    resultPrice = Math.min(calculatePriceForTimeInterval(visitor.getVisitorType(), visitor.getTotalTimeInMinutes()),
-                            getMaxPriceForDay(visitor.getStartDate()));
+            case UNLIMITED -> resultPrice = calculatePriceForUnlimited(visitor);
+            case EVENT -> resultPrice = calculatePriceForEvent(visitor);
+            default -> resultPrice = calculatePriceForTimeBasedModel(visitor);
         }
         return resultPrice;
+    }
+
+    private Long calculatePriceForTimeBasedModel(VisitorDO visitor) {
+        return Math.min(getPriceForTimeInterval(visitor.getVisitorType(),
+                        visitor.getTotalTimeInMinutes()),
+                getMaxPriceForDay(visitor.getStartDate()));
+    }
+
+    private Long calculatePriceForUnlimited(VisitorDO visitor) {
+        return getMaxPriceForDay(visitor.getStartDate());
+    }
+
+    private Long calculatePriceForEvent(VisitorDO visitor) {
+        return Math.min(Math.max(priceProperty.getEventPrice(),
+                        getPriceForTimeInterval(VisitorType.EVENT, visitor.getTotalTimeInMinutes())),
+                getMaxPriceForDay(visitor.getStartDate()));
     }
 
     public Long getMaxPriceForDay(LocalDateTime dateTime) {
@@ -34,14 +49,10 @@ public class PriceService {
         else return (long) priceProperty.getWorkdayLimit();
     }
 
-    private Long calculatePriceForUnlimited(LocalDateTime dateTime) {
-        return getMaxPriceForDay(dateTime);
-    }
-
-    private Long calculatePriceForTimeInterval(VisitorType visitorType, long timeInMinutes) {
+    private Long getPriceForTimeInterval(VisitorType visitorType, long timeInMinutes) {
         List<PriceDistributionEntry> priceDistribution =
                 priceProperty.getVisitors().stream().filter(l -> l.getType().equals(visitorType))
-                        .findFirst().get().getPrices();
+                        .findFirst().orElseThrow().getPrices();
 
         long totalPrice = 0L;
         long passedCalculationTime = 0L;
